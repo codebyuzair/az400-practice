@@ -8,6 +8,7 @@ trigger:
 
 pool:
   name: WindowsAgentPool
+
 strategy:
   matrix:
     Python27:
@@ -33,4 +34,4 @@ steps:
 - script: |
     pip install pytest pytest-azurepipelines
     pytest
-  displayName: 'pytest'
+  displayName: 'Run tests'
