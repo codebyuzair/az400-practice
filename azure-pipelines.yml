@@ -8,16 +8,17 @@ trigger:
 
 pool:
   vmImage: ubuntu-latest
+
 strategy:
   matrix:
-    Python27:
-      python.version: '2.7'
     Python35:
       python.version: '3.5'
     Python36:
       python.version: '3.6'
     Python37:
       python.version: '3.7'
+    Python38:
+      python.version: '3.8'
 
 steps:
 - task: UsePythonVersion@0
@@ -34,3 +35,10 @@ steps:
     pip install pytest pytest-azurepipelines
     pytest
   displayName: 'pytest'
+
+# Use GitHub Token for authenticated requests (if necessary)
+- script: |
+    echo "GITHUB_TOKEN=$(GITHUB_TOKEN)" >> $GITHUB_ENV
+  displayName: 'Set up GitHub Token'
+  env:
+    GITHUB_TOKEN: $(GITHUB_TOKEN)
