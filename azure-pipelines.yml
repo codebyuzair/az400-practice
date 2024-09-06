@@ -10,11 +10,16 @@ pool:
   vmImage: 'windows-latest'
 
 variables:
-  solution: '**/*.sln'
+  solution: '**/*.sln'  # Adjust this if your solution is in a specific subfolder
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
 
 steps:
+- checkout: self  # Ensure the repo is correctly checked out
+
+- script: dir $(System.DefaultWorkingDirectory)
+  displayName: 'List repository contents'  # Check if .sln file is in the correct location
+
 - task: NuGetToolInstaller@1
 
 - task: NuGetCommand@2
@@ -23,7 +28,7 @@ steps:
 
 - task: VSBuild@1
   inputs:
-    solution: '$(solution)'
+    solution: '$(solution)'  # If solution is not in root, update to the correct path
     msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactStagingDirectory)"'
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
